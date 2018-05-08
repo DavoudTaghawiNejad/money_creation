@@ -23,10 +23,23 @@ class Bank(abcFinance.Agent):
             for offer in offers:
                 amount = offer.content
                 if equity / (total_assets + amount) >= self.min_capital_ratio:
-                    self.book(debit=[('loans', amount)], credit=[('deposits', amount)], text='Loan granting')
-
-                    self.send(offer.sender, '_autobook', dict(debit=[('money', amount)],
-                                                              credit=[('loans', amount)],
-                                                              text='Take out loan'))
+                    self.make_loan(amount, offer)
 
                     self.send(offer.sender, 'interest_rate', random() * 0.1)
+
+
+
+
+
+
+
+
+
+    # hide
+
+    def make_loan(self, amount, offer):
+        self.book(debit=[('loans', amount)], credit=[('deposits', amount)], text='Loan granting')
+
+        self.send(offer.sender, '_autobook', dict(debit=[('money', amount)],
+                                                  credit=[('loans', amount)],
+                                                  text='Take out loan'))
