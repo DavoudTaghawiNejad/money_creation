@@ -1,5 +1,7 @@
 import abcFinance
 from random import randrange
+from accountingsystem import s
+
 
 
 class Household(abcFinance.Agent):
@@ -14,13 +16,13 @@ class Household(abcFinance.Agent):
         self.book_end_of_period()
         self.bank = ('bank', 0)
 
-    def request_loans(self):
-        self.send(self.bank, 'request_loan', randrange(10, 100))
+    def request_loans(self, interest_rate):
+        self.interest_rate = interest_rate
+        if self.accounts['money'].get_balance()[0] != s.CREDIT:
+            amount = min(randrange(10, 100), self.accounts['money'].get_balance()[1] / self.interest_rate)
+            self.send(self.bank, 'request_loan', amount)
 
     def pay_interest(self):
-        interest_message = self.get_messages('interest_rate')
-        if interest_message:
-            self.interest_rate = interest_message[0].content
         _, loan = self.accounts['loans'].get_balance()
         interest_payment = loan * self.interest_rate
         self.make_interest_payment(interest_payment, self.bank)

@@ -15,6 +15,10 @@ class Bank(abcFinance.Agent):
                   text='Capital endowment')
         self.book_end_of_period()
 
+    def announce_interest_rate(self):
+        self.interest_rate = random() * 0.1
+        return self.interest_rate
+
     def grant_loans(self):
         side_equity, equity = self.accounts.get_balance('equity')
         total_assets = self.accounts.get_total_assets()
@@ -25,7 +29,6 @@ class Bank(abcFinance.Agent):
                 if equity / (total_assets + amount) >= self.min_capital_ratio:
                     self.make_loan(amount, offer)
 
-                    self.send(offer.sender, 'interest_rate', random() * 0.1)
 
 
 
