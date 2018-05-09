@@ -1,5 +1,5 @@
 import abcFinance
-from random import randrange
+from random import normalvariate
 from accountingsystem import s
 
 
@@ -20,7 +20,7 @@ class Household(abcFinance.Agent):
         money = self.accounts['money'].get_balance()[1]
         if (self.accounts['money'].get_balance()[0] != s.CREDIT and
                 money >= self.interest_rate):
-            amount = randrange(0, money // self.interest_rate)
+            amount = truncnorm(0, money // self.interest_rate, sigma=100)
             self.send(self.bank, 'request_loan', amount)
 
     def pay_interest(self):
@@ -63,3 +63,6 @@ class Household(abcFinance.Agent):
             credit=[('loans', loan)],
             text='Principal repayment'))
 
+
+def truncnorm(lower, upper, sigma):
+    return min(max(0, normalvariate((upper - lower) / 2 + lower, sigma)), upper)
