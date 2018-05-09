@@ -1,6 +1,6 @@
 import abcFinance
 from accountingsystem import s
-from random import random
+from random import randrange
 
 
 class Bank(abcFinance.Agent):
@@ -17,7 +17,10 @@ class Bank(abcFinance.Agent):
         _, self.start_equity = self.accounts['equity'].get_balance()
 
     def announce_interest_rate(self):
-        self.interest_rate = random() * 0.1
+        if self.time <= 50:
+            self.interest_rate = 0.1
+        else:
+            self.interest_rate = 0.2
         return self.interest_rate
 
     def grant_loans(self):
