@@ -3,7 +3,6 @@ from random import randrange
 from accountingsystem import s
 
 
-
 class Household(abcFinance.Agent):
     def init(self, money=0, loans=0, participations=0):
         self.make_asset_accounts(['money', 'participations'])
@@ -18,8 +17,10 @@ class Household(abcFinance.Agent):
 
     def request_loans(self, interest_rate):
         self.interest_rate = interest_rate
-        if self.accounts['money'].get_balance()[0] != s.CREDIT:
-            amount = min(randrange(10, 100), self.accounts['money'].get_balance()[1] / self.interest_rate)
+        money = self.accounts['money'].get_balance()[1]
+        if (self.accounts['money'].get_balance()[0] != s.CREDIT and
+                money >= self.interest_rate):
+            amount = randrange(0, money // self.interest_rate)
             self.send(self.bank, 'request_loan', amount)
 
     def pay_interest(self):
