@@ -55,8 +55,11 @@ class Bank(abcFinance.Agent):
 
     def make_div_payment(self, loan):
         assert loan >= 0
-        self.book(credit=[('deposits', loan)], debit=[('div_payment', loan)], text='Principal repayment')
+        self.book(debit=[('div_payment', loan)],
+                  credit=[('deposits', loan)],
+                  text='Principal repayment')
+
         self.send(('household', randrange(100)), '_autobook', dict(
-            credit=[('dividend income', loan)],
             debit=[('money', loan)],
+            credit=[('dividend income', loan)],
             text='Principal repayment'))

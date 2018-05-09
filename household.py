@@ -30,7 +30,6 @@ class Household(abcFinance.Agent):
 
     def repay_loan_principal(self):
         _, loan = self.accounts['loans'].get_balance()
-
         self.repay_loan(loan, self.bank)
 
     def return_money(self):
@@ -57,7 +56,10 @@ class Household(abcFinance.Agent):
             text='Interest payment'))
 
     def repay_loan(self, loan, bank):
-        self.book(debit=[('loans', loan)], credit=[('money', loan)], text='Principal repayment')
+        self.book(debit=[('loans', loan)],
+                  credit=[('money', loan)],
+                  text='Principal repayment')
+
         self.send(bank, '_autobook', dict(
             debit=[('deposits', loan)],
             credit=[('loans', loan)],
