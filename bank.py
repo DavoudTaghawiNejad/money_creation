@@ -20,7 +20,7 @@ class Bank(abcFinance.Agent):
         if self.time <= 50:
             self.interest_rate = 0.1
         else:
-            self.interest_rate = 0.2
+            self.interest_rate = 0.05
         return self.interest_rate
 
     def grant_loans(self):
