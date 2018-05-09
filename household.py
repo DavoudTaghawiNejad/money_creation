@@ -33,6 +33,10 @@ class Household(abcFinance.Agent):
 
         self.repay_loan(loan, self.bank)
 
+    def return_money(self):
+        _, money = self.accounts['money'].get_balance()
+        self.log('money', money)
+
 
 
 
