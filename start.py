@@ -4,10 +4,10 @@ import abce
 from bank import Bank
 from household import Household
 
-min_capital_ratio = 0.0
+min_capital_ratio = 0.03
 
 sim = abce.Simulation()
-bank = sim.build_agents(Bank, 'bank', number=1, min_capital_ratio=min_capital_ratio, reserves=10000, deposits=10000)
+bank = sim.build_agents(Bank, 'bank', number=1, min_capital_ratio=min_capital_ratio, reserves=10000, deposits=5000)
 households = sim.build_agents(Household, 'household', number=100, money=100, loans=0)
 
 
