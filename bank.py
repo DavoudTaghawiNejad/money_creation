@@ -8,12 +8,13 @@ class Bank(abcFinance.Agent):
         self.min_capital_ratio = min_capital_ratio
         self.make_asset_accounts(['reserves', 'loans'])
         self.make_liability_accounts(['deposits'])
-        self.make_flow_accounts(['interest income'])
+        self.make_flow_accounts(['interest income', 'div_payment'])
 
         self.book(debit=[('reserves', reserves), ('loans', loans)],
                   credit=[('deposits', deposits), ('equity', reserves + loans - deposits)],
                   text='Capital endowment')
         self.book_end_of_period()
+        _, self.start_equity = self.accounts['equity'].get_balance()
 
     def announce_interest_rate(self):
         self.interest_rate = random() * 0.1
@@ -29,9 +30,11 @@ class Bank(abcFinance.Agent):
                 if equity / (total_assets + amount) >= self.min_capital_ratio:
                     self.make_loan(amount, offer)
 
-
-
-
+    def pay_dividents(self):
+        _, equity = self.accounts['equity'].get_balance()
+        _, deposits = self.accounts['deposits'].get_balance()
+        if deposits != s.DEBIT:
+            self.make_div_payment(max(0, min(equity - self.start_equity, deposits)))
 
 
 
@@ -46,3 +49,11 @@ class Bank(abcFinance.Agent):
         self.send(offer.sender, '_autobook', dict(debit=[('money', amount)],
                                                   credit=[('loans', amount)],
                                                   text='Take out loan'))
+
+    def make_div_payment(self, loan):
+        assert loan >= 0
+        self.book(credit=[('deposits', loan)], debit=[('div_payment', loan)], text='Principal repayment')
+        self.send(('household', randrange(100)), '_autobook', dict(
+            credit=[('dividend income', loan)],
+            debit=[('money', loan)],
+            text='Principal repayment'))
