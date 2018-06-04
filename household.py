@@ -1,6 +1,6 @@
 import abcFinance
 from random import normalvariate
-from accountingsystem import s
+from abcFinance.ledger import AccountSide as s
 
 
 class Household(abcFinance.Agent):

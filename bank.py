@@ -1,5 +1,5 @@
 import abcFinance
-from accountingsystem import s
+from abcFinance.ledger import AccountSide as s
 from random import randrange
 
 

@@ -1,12 +1,10 @@
-import sys
-sys.path.insert(0, '../abcFinance')
-import abce
+import abce as abcEconomics
 from bank import Bank
 from household import Household
 
 min_capital_ratio = 0.03
 
-sim = abce.Simulation()
+sim = abcEconomics.Simulation()
 bank = sim.build_agents(Bank, 'bank', number=1, min_capital_ratio=min_capital_ratio, reserves=11000, deposits=10000)
 households = sim.build_agents(Household, 'household', number=100, money=100, loans=0)
 
@@ -35,4 +33,4 @@ for time in range(100):
     households.return_money()
     households.repay_loan_principal()
     bank.pay_dividents()
-sim.graphs()
+sim.graph()
